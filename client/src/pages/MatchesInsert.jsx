@@ -615,58 +615,61 @@ class MatchesInsert extends Component {
       })
     })
      
-    for (let item of playersUpdate) {
-      const payload = {
-        name: item.name,
-        nickname: item.nickname,
-        phone: item.phone,
-        age: item.age,
-        handicapAnt: item.handicapAnt,
-        handicapAtl: item.handicapAtl,
-        dinheiroAc: item.dinheiroAc,
+    if (window.confirm(
+        `
+        Confirma a criação de partida com esses dados?
+        `
+    )){
+      for (let item of playersUpdate) {
+        const payload = {
+          name: item.name,
+          nickname: item.nickname,
+          phone: item.phone,
+          age: item.age,
+          handicapAnt: item.handicapAnt,
+          handicapAtl: item.handicapAtl,
+          dinheiroAc: item.dinheiroAc,
+        }
+  
+        await api.updatePlayerById(item.id, payload).catch(error => console.log(error.message))
       }
-
-      await api.updatePlayerById(item.id, payload).catch(error => console.log(error.message))
+  
+      const payload = {
+        players_1,
+        players_2,
+        totalPlayers_1,
+        totalPlayers_2,
+        betPrice,
+        first_1,
+        second_1,
+        third_1,
+        first_2,
+        second_2,
+        third_2,
+        day,
+        firstPrize_1,
+        secondPrize_1,
+        thirdPrize_1,
+        firstPrize_2,
+        secondPrize_2,
+        thirdPrize_2,
+      }
+      await api.insertMatch(payload).then(res => {
+        alert(`
+        Partida criada com sucesso!
+        Resultado:
+        1ª Volta
+          1º Lugar: ${first_1} --> Prêmio: ${firstPrize_1} Resto: ${restFirst_1} para ${first_1[0]}.
+          2º Lugar: ${second_1} --> Prêmio: ${secondPrize_1} Resto: ${restSecond_1} para ${second_1[0]}
+          3º Lugar: ${third_1} --> Prêmio: ${thirdPrize_1} Resto: ${restThird_1} para ${third_1[0]}
+        2ª Volta
+          1º Lugar: ${first_2} --> Prêmio: ${firstPrize_2} Resto: ${restFirst_2} para ${first_2[0]}.
+          2º Lugar: ${second_2} --> Prêmio: ${secondPrize_2} Resto: ${restSecond_2} para ${second_2[0]}
+          3º Lugar: ${third_2} --> Prêmio: ${thirdPrize_2} Resto: ${restThird_2} para ${third_2[0]}
+        `)
+        window.location.reload()
+      })
     }
-
-    const payload = {
-      players_1,
-      players_2,
-      totalPlayers_1,
-      totalPlayers_2,
-      betPrice,
-      first_1,
-      second_1,
-      third_1,
-      first_2,
-      second_2,
-      third_2,
-      day,
-      firstPrize_1,
-      secondPrize_1,
-      thirdPrize_1,
-      firstPrize_2,
-      secondPrize_2,
-      thirdPrize_2,
-    }
-
-
-
-    await api.insertMatch(payload).then(res => {
-      alert(`
-      Partida criada com sucesso!
-      Resultado:
-      1ª Volta
-        1º Lugar: ${first_1} --> Prêmio: ${firstPrize_1} Resto: ${restFirst_1} para ${first_1[0]}.
-        2º Lugar: ${second_1} --> Prêmio: ${secondPrize_1} Resto: ${restSecond_1} para ${second_1[0]}
-        3º Lugar: ${third_1} --> Prêmio: ${thirdPrize_1} Resto: ${restThird_1} para ${third_1[0]}
-      2ª Volta
-        1º Lugar: ${first_2} --> Prêmio: ${firstPrize_2} Resto: ${restFirst_2} para ${first_2[0]}.
-        2º Lugar: ${second_2} --> Prêmio: ${secondPrize_2} Resto: ${restSecond_2} para ${second_2[0]}
-        3º Lugar: ${third_2} --> Prêmio: ${thirdPrize_2} Resto: ${restThird_2} para ${third_2[0]}
-      `)
-      window.location.reload()
-    })
 
   }
 

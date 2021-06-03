@@ -144,7 +144,7 @@ class PlayersList extends Component {
                         data={players}
                         columns={columns}
                         loading={isLoading}
-                        defaultPageSize={10}
+                        defaultPageSize={50}
                         showPageSizeOptions={true}
                         minRows={0}
                     />

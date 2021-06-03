@@ -79,7 +79,7 @@ class MatchesList extends Component {
                         data={matches}
                         columns={columns}
                         loading={isLoading}
-                        defaultPageSize={10}
+                        defaultPageSize={50}
                         showPageSizeOptions={true}
                         minRows={0}
                     />
