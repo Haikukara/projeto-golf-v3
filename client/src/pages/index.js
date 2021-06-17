@@ -6,5 +6,6 @@ import MatchesList from './MatchesList';
 import HandicapruleList from './HandicapruleList';
 import HandicapruleUpdate from './HandicapruleUpdate';
 import MatchShow from './MatchShow'
+import MatchesUpdate from './MatchesUpdate'
 
-export { PlayersList, PlayersInsert, PlayersUpdate, MatchesInsert, MatchesList, MatchShow, HandicapruleList, HandicapruleUpdate };
+export { PlayersList, PlayersInsert, PlayersUpdate, MatchesInsert, MatchesList, MatchShow, HandicapruleList, HandicapruleUpdate, MatchesUpdate };

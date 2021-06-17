@@ -218,7 +218,6 @@ class MatchShow extends Component {
                 dinheiroAc: item.dinheiroAcPartida,
             })
         })
-        console.log(playersUpdate)
         for (let item of playersUpdate) {
             const payload = {
                 name: item.name,
@@ -232,11 +231,45 @@ class MatchShow extends Component {
 
             await api.updatePlayerById(item.id, payload).catch(error => console.log(error.message))
         }
-        console.log(this.state.id)
-        api.deleteMatchById(this.state.id)
-        window.location.href = `/matches/create`
+        window.location.href = `/matches/update/${this.state.id}`
 
     }
+
+    deleteMatch = async () => {
+        const { players_1, players_2 } = this.state
+        let ids = new Set(players_1.map(d => d.nickname))
+        let players_12 = [...players_1, ...players_2.filter(d => !ids.has(d.nickname))]
+        let playersUpdate = []
+        players_12.forEach(item => {
+            const jogadorAtual = this.state.allPlayers.find(player => player.nickname === item.nickname)
+            playersUpdate.push({
+                id: jogadorAtual._id,
+                name: jogadorAtual.name,
+                nickname: jogadorAtual.nickname,
+                phone: jogadorAtual.phone,
+                age: jogadorAtual.age,
+                handicapAnt: jogadorAtual.handicapAnt,
+                handicapAtl: item.handicapPartida,
+                dinheiroAc: item.dinheiroAcPartida,
+            })
+        })
+        for (let item of playersUpdate) {
+            const payload = {
+                name: item.name,
+                nickname: item.nickname,
+                phone: item.phone,
+                age: item.age,
+                handicapAnt: item.handicapAnt,
+                handicapAtl: item.handicapAtl,
+                dinheiroAc: item.dinheiroAc,
+            }
+
+            await api.updatePlayerById(item.id, payload).catch(error => console.log(error.message))
+        }
+        api.deleteMatchById(this.state.id)
+        window.location.href = `/matches/list`
+    }
+
 
     render() {
         const { match, isLoading } = this.state
@@ -352,8 +385,10 @@ class MatchShow extends Component {
                         minRows={0}
                     />
                 )}
+                <p></p>
                 <Button onClick={() => this.exportPDF(tableData_1, tableData_2)}>PDF</Button>
                 <Button onClick={this.remakeMatch} disabled={showRmkMatch}>Refazer Partida</Button>
+                <Button  onClick={this.deleteMatch} disabled={showRmkMatch}>Deletar Partida</Button>
             </Wrapper>
         )
     }

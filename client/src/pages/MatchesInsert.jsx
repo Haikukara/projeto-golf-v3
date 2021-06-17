@@ -594,7 +594,7 @@ class MatchesInsert extends Component {
       let handicapAntUpdate = item.handicapAnt
       let handicapAtlUpdate = item.handicapAtl
       let dinheiroAcUpdate = item.dinheiroAc
-      if (dinheiroAcUpdate >= handicaprule){
+      if (dinheiroAcUpdate >= handicaprule * 1.5){
         handicapAntUpdate = item.handicapAtl
         handicapAtlUpdate -= 1
         dinheiroAcUpdate = 0
@@ -693,6 +693,7 @@ class MatchesInsert extends Component {
         Cell: function (props) {
           return (
             <InputNumber
+              value={context.state.teste}
               type="number"
               onChange={context.handleChangeInputGross1(props.original.nickname)}
             />
