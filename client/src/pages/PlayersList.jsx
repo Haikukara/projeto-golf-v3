@@ -4,6 +4,8 @@ import api from '../api';
 
 import styled from 'styled-components';
 import 'react-table-6/react-table.css';
+import jsPDF from 'jspdf';
+import "jspdf-autotable";
 
 
 
@@ -18,6 +20,12 @@ const Update = styled.div`
 const Delete = styled.div`
     color: #ff0000;
     cursor: pointer;
+`
+
+const Button = styled.button.attrs({
+    className: `btn btn-danger`,
+})`
+    margin: 15px 15px 15px 5px;
 `
 
 class UpdatePlayer extends Component {
@@ -60,7 +68,44 @@ class PlayersList extends Component {
             players: [],
             columns: [],
             isLoading: false,
+            lastMatchDay: '',
         }
+    }
+
+    createTableData = (players) => {
+        let tableData = [];
+        players.forEach(item => {
+            tableData.push({
+                name: item.name,
+                nickname: item.nickname,
+                phone: item.phone,
+                age: item.age,
+                handicapAnt: item.handicapAnt,
+                handicapAtl: item.handicapAtl,
+                dinheiroAc: item.dinheiroAc,
+            })
+        })
+        return tableData
+    }
+
+    exportPDF = (tableData, lastMatchDay) => {
+        const unit = "pt"
+        const size = "A4"
+        const orientation = "landscape"
+        const marginLeft = 40
+        const PDF = new jsPDF(orientation, unit, size)
+        PDF.setFontSize(15)
+        const title = `Dados após última partida! (Data da última partida: ${lastMatchDay})`
+        const headers = [["Nome", "Apelido", "Handicap Anterior", "Handicap Atual", "Dinheiro Acumulado (R$)"]]
+        const data = tableData.map(elt => [elt.name, elt.nickname, elt.handicapAnt, elt.handicapAtl, elt.dinheiroAc])
+        let content = {
+            startY: 60,
+            head: headers,
+            body: data
+        }
+        PDF.text(title, marginLeft, 40)
+        PDF.autoTable(content)
+        PDF.save(`${lastMatchDay}-TabelaJogadores.pdf`)
     }
 
     componentDidMount = async () => {
@@ -69,6 +114,11 @@ class PlayersList extends Component {
         await api.getAllPlayers().then(players => {
             this.setState({
                 players: players.data.data,
+            })
+        })
+        await api.getAllMatches().then(allMatches => {
+            this.setState({
+                lastMatchDay: allMatches.data.data[allMatches.data.data.length -1].day,
                 isLoading: false,
             })
         })
@@ -131,7 +181,7 @@ class PlayersList extends Component {
                 },
             },
         ]
-        
+        let tableData = this.createTableData(this.state.players)
         let showTable = true
         if (!players.length) {
             showTable = false
@@ -141,7 +191,7 @@ class PlayersList extends Component {
             <Wrapper>
                 {showTable && (
                     <ReactTable 
-                        data={players}
+                        data={tableData}
                         columns={columns}
                         loading={isLoading}
                         defaultPageSize={50}
@@ -149,6 +199,7 @@ class PlayersList extends Component {
                         minRows={0}
                     />
                 )}
+                <Button onClick={() => this.exportPDF(tableData, this.state.lastMatchDay)}>PDF</Button>
             </Wrapper>
         )
     }

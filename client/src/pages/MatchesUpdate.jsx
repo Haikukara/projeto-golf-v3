@@ -298,11 +298,11 @@ function MatchesUpdate(mat) {
       setData2(_original2)
       setBetPrice(match.data.data.betPrice)
       setDay(match.data.data.day)
-      if (match.data.data.second_1.length === 0) {
+      if (match.data.data.secondPrize_1 === 0) {
         setCheckbox2lugar(false)
         setCheckbox3lugar(false)
         setDisableCheckbox(true)
-      } else if (match.data.data.third_1.length === 0) {
+      } else if (match.data.data.thirdPrize_1 === 0) {
         setCheckbox2lugar(true)
         setCheckbox3lugar(false)
         setDisableCheckbox(false)
@@ -311,11 +311,11 @@ function MatchesUpdate(mat) {
         setCheckbox3lugar(true)
         setDisableCheckbox(false)
       }
-      if (match.data.data.second_2.length === 0) {
+      if (match.data.data.secondPrize_2 === 0) {
         setCheckbox2lugar2volta(false)
         setCheckbox3lugar2volta(false)
         setDisableCheckbox2volta(true)
-      } else if (match.data.data.third_2.length === 0) {
+      } else if (match.data.data.thirdPrize_2 === 0) {
         setCheckbox2lugar2volta(true)
         setCheckbox3lugar2volta(false)
         setDisableCheckbox2volta(false)
